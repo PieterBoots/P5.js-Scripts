@@ -23,25 +23,25 @@ function draw() {
   var oldpixel=0;
   var newpixel=0;
   var quant_error = 0;
-   var shift=0;
-   for ( y = 0; y < 300; y++)
-  for ( x = 0; x < 400; x++)
-   for ( shift = 0; shift < 3; shift++){
- 
-     oldpixel = capture.pixels[(x+y*400)*4+shift];
-     if (oldpixel<128) newpixel=0; else newpixel=255;
-      capture.pixels[(x+y*400)*4+shift]= newpixel;
+  var shift=0;
+  for ( y = 0; y < 300; y++)
+  {   
+   var pos=y*400*4;
+   for ( x = 0; x < 400; x++)
+     for ( shift = 0; shift < 3; shift++)
+     {     
+      oldpixel = capture.pixels[pos+shift];
+      if (oldpixel<128) newpixel=0; else newpixel=255;
+        capture.pixels[pos+shift]= newpixel;
     
-      quant_error = oldpixel - newpixel;
-      //setPixel(x+1,y, getPixel(x+1,y) + w1 * quant_error);
-    capture.pixels[((x+1)+(y+0)*400)*4+shift]+= w1 * quant_error;         
-     // setPixel(x-1,y+1, getPixel(x-1,y+1) + w2 * quant_error);
-    capture.pixels[((x-1)+(y+1)*400)*4+shift]+= w2 * quant_error;  
-     // setPixel(x,y+1, getPixel(x,y+1) + w3 * quant_error);
-    capture.pixels[((x+0)+(y+1)*400)*4+shift]+= w3 * quant_error;  
-      //setPixel(x+1,y+1, getPixel(x+1,y+1) + w4 * quant_error);
-    capture.pixels[((x+1)+(y+1)*400)*4+shift]+= w4 * quant_error;  
-  }  
+      quant_error = oldpixel - newpixel;   
+      capture.pixels[pos+shift+4]+= w1 * quant_error;             
+      capture.pixels[pos+shift+1596]+= w2 * quant_error;  
+      capture.pixels[pos+shift+1600]+= w3 * quant_error;  
+      capture.pixels[pos+shift+1604]+= w4 * quant_error;  
+      pos=pos+4;
+     }  
+  }
   // End here  
   capture.updatePixels();
   image(capture, 0, 0);
